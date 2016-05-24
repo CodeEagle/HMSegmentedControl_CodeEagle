@@ -252,7 +252,7 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 	/**
 	 Index of the currently selected segment.
 	 */
-	public lazy var selectedSegmentIndex: Int = 0
+	public var selectedSegmentIndex: Int = 0
 
 	/**
 	 Height of the selection indicator. Only effective when `HMSegmentedControlSelectionStyle` is either `HMSegmentedControlSelectionStyleTextWidthStripe` or `HMSegmentedControlSelectionStyleFullWidthStripe`.
@@ -289,6 +289,8 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 	public lazy var shouldAnimateUserSelection = true
 
 	public lazy var BadgeRadiu: CGFloat = 6
+
+	public lazy var bottomBorder = false
 
 	deinit {
 		self.removeObserver(self, forKeyPath: "frame")
@@ -331,7 +333,7 @@ public extension HMSegmentedControl_CodeEagle {
 	}
 
 	convenience init(sectionTitles titles: [HMSegmentTitleConvertible], sectionImages off: [UIImage], sectionSelectedImages on: [UIImage]) {
-		assert(off.count == titles.count, ":\(__FUNCTION__): Images bounds (\(off.count)) Dont match Title bounds (\(titles.count))")
+		assert(off.count == titles.count, ":\(#function): Images bounds (\(off.count)) Dont match Title bounds (\(titles.count))")
 		self.init(frame: CGRectZero)
 		sectionTitles = titles
 		sectionImages = off
@@ -654,6 +656,7 @@ extension HMSegmentedControl_CodeEagle {
 		}
 		addBadge()
 		addSelectionIndicators()
+		addSeperator()
 	}
 
 	private func updateOffsetXForCEnterAllControl() {
@@ -716,11 +719,19 @@ extension HMSegmentedControl_CodeEagle {
 			// Fix rect position/size to avoid blurry labels
 			rect = CGRectMake(ceil(rect.origin.x), ceil(rect.origin.y), ceil(rect.size.width), ceil(rect.size.height))
 			let text = attributedTitleAtIndex(idx)
-			let titleLayer = CATextLayer()
+			var titleLayer: CATextLayer = CATextLayer()
+
+			if backgroundColor != nil && backgroundColor != UIColor.clearColor() {
+				let layer = OpaqueTextLayer()
+				layer.setBackgroundC(backgroundColor)
+				titleLayer = layer
+				titleLayer.opaque = true
+			}
 			titleLayer.frame = rect
 			titleLayer.alignmentMode = kCAAlignmentCenter
 			titleLayer.truncationMode = kCATruncationEnd
 			titleLayer.string = text
+
 			titleLayer.contentsScale = UIScreen.mainScreen().scale
 			scrollView.layer.addSublayer(titleLayer)
 
@@ -864,6 +875,15 @@ extension HMSegmentedControl_CodeEagle {
 		}
 	}
 
+	private func addSeperator() {
+		if bottomBorder {
+			let line = CALayer()
+			line.frame = CGRectMake(0, frame.height - 0.5, frame.width, 0.5)
+			line.backgroundColor = UIColor.lightGrayColor().CGColor
+			layer.addSublayer(line)
+		}
+	}
+
 	public override func willMoveToSuperview(newSuperview: UIView?) {
 		if newSuperview == nil { return }
 		if sectionTitles != nil || sectionImages != nil {
@@ -906,8 +926,14 @@ extension HMSegmentedControl_CodeEagle {
 //MARK:- Index Change
 extension HMSegmentedControl_CodeEagle {
 
-	func setSelectedSegmentIndex(index: Int, animated: Bool = false, notify: Bool = false) {
+	public func setSelectedSegmentIndex(index: Int, animated: Bool = false, notify: Bool = false) {
+		if selectedSegmentIndex == index { return }
 		selectedSegmentIndex = index
+		indexChange(animated, notify: notify)
+	}
+
+	func indexChange(animated: Bool = false, notify: Bool = false) {
+		let index = selectedSegmentIndex
 		setNeedsDisplay()
 
 		if selectedSegmentIndex == HMSegmentedControlIndex.NoSegment.rawValue {
@@ -939,10 +965,6 @@ extension HMSegmentedControl_CodeEagle {
 					}
 				}
 
-				if notify {
-					notifyForSegmentChangeToIndex(UInt(index))
-				}
-
 				// Restore CALayer animations
 				selectionIndicatorArrowLayer.actions = nil
 				selectionIndicatorStripLayer.actions = nil
@@ -950,13 +972,33 @@ extension HMSegmentedControl_CodeEagle {
 
 				// Animate to new position
 				CATransaction.begin()
+				CATransaction.setCompletionBlock({
+					if notify {
+						self.notifyForSegmentChangeToIndex(UInt(index))
+					}
+				})
 				CATransaction.setAnimationDuration(0.15)
 				CATransaction.setAnimationTimingFunction(CAMediaTimingFunction(controlPoints: 0.4, 0.1, 0.3, 1.2))
 				setArrowFrame()
-				selectionIndicatorBoxLayer.frame = frameForSelectionIndicator()
+				selectionIndicatorArrowLayer.frame = frameForSelectionIndicator()
 				selectionIndicatorStripLayer.frame = frameForSelectionIndicator()
 				selectionIndicatorBoxLayer.frame = frameForFillerSelectionIndicator()
 				CATransaction.commit()
+			} else {
+				// Disable CALayer animations
+				let animations = ["position": NSNull(), "bounds": NSNull()]
+				selectionIndicatorArrowLayer.actions = animations
+
+				selectionIndicatorArrowLayer.frame = frameForSelectionIndicator()
+				selectionIndicatorStripLayer.actions = animations
+				selectionIndicatorStripLayer.frame = frameForSelectionIndicator()
+				selectionIndicatorBoxLayer.actions = animations
+				selectionIndicatorBoxLayer.frame = frameForFillerSelectionIndicator()
+				setArrowFrame()
+
+				if notify {
+					notifyForSegmentChangeToIndex(UInt(index))
+				}
 			}
 		}
 	}
@@ -1101,5 +1143,44 @@ final private class HMScrollView: UIScrollView {
 			return
 		}
 		nextResponder()?.touchesEnded(touches, withEvent: event)
+	}
+}
+
+private final class OpaqueTextLayer: CATextLayer {
+
+	override init() {
+		super.init()
+		initialize()
+	}
+
+	required init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		initialize()
+	}
+
+	override init(layer: AnyObject) {
+		super.init(layer: layer)
+		initialize()
+	}
+
+	private func initialize() {
+		contentsScale = UIScreen.mainScreen().scale
+	}
+
+	private var aBackgroundColor: UIColor! = UIColor.whiteColor()
+
+	func setBackgroundC(color: UIColor!) {
+		if let c = color {
+			aBackgroundColor = c
+		}
+		setNeedsDisplay()
+	}
+
+	override func drawInContext(ctx: CGContext) {
+		UIGraphicsPushContext(ctx)
+		CGContextSetFillColorWithColor(ctx, aBackgroundColor.CGColor)
+		CGContextFillRect(ctx, bounds)
+		super.drawInContext(ctx)
+		UIGraphicsPopContext()
 	}
 }
