@@ -32,7 +32,7 @@ class ViewController: UIViewController {
 		let buttons: [HMSegmentTitleConvertible] = ["a", "b", "c", "asdflkasdfma", "e", "f", "g", "h"]
 		segmentControl = HMSegmentedControl_CodeEagle(sectionTitles: buttons)
 		segmentControl.toggleMatchTitle(buttons.first, hide: false)
-		segmentControl.backgroundColor = UIColor.orangeColor()
+//		segmentControl.backgroundColor = UIColor.orangeColor()
 		segmentControl?.frame = CGRectMake(0, 64, mainScreenWidth, 44)
 		segmentControl?.selectionIndicatorLocation = .Down
 		segmentControl?.selectionIndicatorColor = UIColor.redColor()
