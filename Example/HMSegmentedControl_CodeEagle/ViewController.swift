@@ -9,6 +9,9 @@
 import UIKit
 import HMSegmentedControl_CodeEagle
 class ViewController: UIViewController {
+    override func loadView() {
+        view = UIView()
+    }
 
 	private var segmentControl: HMSegmentedControl_CodeEagle!
 	override func viewDidLoad() {
@@ -17,12 +20,14 @@ class ViewController: UIViewController {
 		// Do any additional setup after loading the view, typically from a nib.
 	}
 
+    
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
 		// Dispose of any resources that can be recreated.
 	}
 
 	func dealSegment() {
+        view.backgroundColor = UIColor.whiteColor()
 		let mainScreenWidth = UIScreen.mainScreen().bounds.width
 		let buttons: [HMSegmentTitleConvertible] = ["a", "b", "c", "asdflkasdfma", "e", "f", "g", "h"]
 		segmentControl = HMSegmentedControl_CodeEagle(sectionTitles: buttons)

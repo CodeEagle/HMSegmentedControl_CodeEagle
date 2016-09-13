@@ -7,6 +7,9 @@
 //
 
 import UIKit
+var iOSTen: Bool {
+    return NSProcessInfo().isOperatingSystemAtLeastVersion(NSOperatingSystemVersion(majorVersion: 10, minorVersion: 0, patchVersion: 0))
+}
 //MARK:- protocol
 public protocol HMSegmentTitleConvertible {
 	var title: (string: String?, attributedString: NSAttributedString?) { get }
@@ -717,9 +720,9 @@ extension HMSegmentedControl_CodeEagle {
 			}
 
 			// Fix rect position/size to avoid blurry labels
-			rect = CGRectMake(ceil(rect.origin.x), ceil(rect.origin.y), ceil(rect.size.width), ceil(rect.size.height))
+			rect = CGRectMake(ceil(rect.origin.x), ceil(rect.origin.y), ceil(rect.size.width), ceil(rect.size.height + 1))
 			let text = attributedTitleAtIndex(idx)
-			var titleLayer: CATextLayer = CATextLayer()
+			var titleLayer = CATextLayer()
 
 			if backgroundColor != nil && backgroundColor != UIColor.clearColor() {
 				let layer = OpaqueTextLayer()
