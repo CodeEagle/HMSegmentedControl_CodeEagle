@@ -13,7 +13,7 @@ class ViewController: UIViewController {
         view = UIView()
     }
 
-	private var segmentControl: HMSegmentedControl_CodeEagle!
+	fileprivate var segmentControl: HMSegmentedControl_CodeEagle!
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		dealSegment()
@@ -27,25 +27,25 @@ class ViewController: UIViewController {
 	}
 
 	func dealSegment() {
-        view.backgroundColor = UIColor.whiteColor()
-		let mainScreenWidth = UIScreen.mainScreen().bounds.width
+        view.backgroundColor = UIColor.white
+		let mainScreenWidth = UIScreen.main.bounds.width
 		let buttons: [HMSegmentTitleConvertible] = ["a", "b", "c", "asdflkasdfma", "e", "f", "g", "h"]
 		segmentControl = HMSegmentedControl_CodeEagle(sectionTitles: buttons)
 		segmentControl.toggleMatchTitle(buttons.first, hide: false)
 //		segmentControl.backgroundColor = UIColor.orangeColor()
-		segmentControl?.frame = CGRectMake(0, 64, mainScreenWidth, 44)
-		segmentControl?.selectionIndicatorLocation = .Down
-		segmentControl?.selectionIndicatorColor = UIColor.redColor()
-		segmentControl?.segmentWidthStyle = .Dynamic
+		segmentControl?.frame = CGRect(x: 0, y: 64, width: mainScreenWidth, height: 44)
+		segmentControl?.selectionIndicatorLocation = .down
+		segmentControl?.selectionIndicatorColor = UIColor.red
+		segmentControl?.segmentWidthStyle = .dynamic
 		segmentControl?.selectedSegmentIndex = 0
 		segmentControl?.segmentEdgeInset = UIEdgeInsetsMake(0, 10, 0, 10)
 		segmentControl?.titleTextAttributes = [
-			NSForegroundColorAttributeName: UIColor.blackColor(),
-			NSFontAttributeName: UIFont.systemFontOfSize(15)
+			NSForegroundColorAttributeName: UIColor.black,
+			NSFontAttributeName: UIFont.systemFont(ofSize: 15)
 		]
 		segmentControl?.selectedTitleTextAttributes = [
-			NSForegroundColorAttributeName: UIColor.blackColor(),
-			NSFontAttributeName: UIFont.systemFontOfSize(15)
+			NSForegroundColorAttributeName: UIColor.black,
+			NSFontAttributeName: UIFont.systemFont(ofSize: 15)
 		]
 		segmentControl?.selectionIndicatorHeight = 2
 

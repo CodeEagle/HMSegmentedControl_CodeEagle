@@ -7,8 +7,19 @@
 //
 
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 var iOSTen: Bool {
-    return NSProcessInfo().isOperatingSystemAtLeastVersion(NSOperatingSystemVersion(majorVersion: 10, minorVersion: 0, patchVersion: 0))
+    return ProcessInfo().isOperatingSystemAtLeast(OperatingSystemVersion(majorVersion: 10, minorVersion: 0, patchVersion: 0))
 }
 //MARK:- protocol
 public protocol HMSegmentTitleConvertible {
@@ -35,55 +46,55 @@ extension Array {
 
 //MARK:- TypeAlias
 public typealias IndexChangeBlock = (UInt) -> Void
-public typealias HMTitleFormatterBlock = (segmentedControl: HMSegmentedControl_CodeEagle, title: String, index: Int, selected: Bool) -> NSAttributedString
+public typealias HMTitleFormatterBlock = (_ segmentedControl: HMSegmentedControl_CodeEagle, _ title: String, _ index: Int, _ selected: Bool) -> NSAttributedString
 //MARK:- Enum
 //MARK: HMSegmentedControlSelectionStyle
 public enum HMSegmentedControlSelectionStyle {
-	case TextWidthStripe, FullWidthStripe, Box, Arrow
+	case textWidthStripe, fullWidthStripe, box, arrow
 }
 //MARK: HMSegmentedControlSelectionIndicatorLocation
 public enum HMSegmentedControlSelectionIndicatorLocation {
-	case Up, Down, None
+	case up, down, none
 }
 //MARK: HMSegmentedControlSegmentWidthStyle
 public enum HMSegmentedControlSegmentWidthStyle {
-	case Fixed, Dynamic
+	case fixed, dynamic
 }
 //MARK: HMSegmentedControlBorderType
 public enum HMSegmentedControlBorderType {
-	case None
-	case Top
-	case Left
-	case Bottom
-	case Right
+	case none
+	case top
+	case left
+	case bottom
+	case right
 }
 //MARK: HMSegmentedControlType
 public enum HMSegmentedControlType {
-	case Text, Images, TextImages
+	case text, images, textImages
 }
 
 //MARK: HMSegmentedControlIndex
 private enum HMSegmentedControlIndex: Int {
-	case NoSegment = -1
+	case noSegment = -1
 }
 
 //MARK:- HMSegmentedControl_CodeEagle
-public class HMSegmentedControl_CodeEagle: UIControl {
+open class HMSegmentedControl_CodeEagle: UIControl {
 
 	// MARK:- Public
-	public var sectionTitles: [HMSegmentTitleConvertible]? {
+	open var sectionTitles: [HMSegmentTitleConvertible]? {
 		didSet {
 			setNeedsLayout()
 		}
 	}
 
-	public var sectionImages: [UIImage]? {
+	open var sectionImages: [UIImage]? {
 		didSet {
 			setNeedsLayout()
 		}
 	}
 
-	public var sectionSelectedImages: [UIImage]? {
+	open var sectionSelectedImages: [UIImage]? {
 		didSet {
 			setNeedsLayout()
 		}
@@ -94,47 +105,47 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Alternativly, you could use `addTarget:action:forControlEvents:`
 	 */
-	public var indexChangeBlock: IndexChangeBlock?
+	open var indexChangeBlock: IndexChangeBlock?
 
 	/**
 	 Used to apply custom text styling to titles when set.
 
 	 When this block is set, no additional styling is applied to the `NSAttributedString` object returned from this block.
 	 */
-	public var titleFormatter: HMTitleFormatterBlock?
+	open var titleFormatter: HMTitleFormatterBlock?
 
 	/**
 	 Text attributes to apply to item title text.
 	 */
-	public dynamic var titleTextAttributes: [String: NSObject]?
+	open dynamic var titleTextAttributes: [String: NSObject]?
 
 	/*
 	 Text attributes to apply to selected item title text.
 
 	 Attributes not set in this dictionary are inherited from `titleTextAttributes`.
 	 */
-	public dynamic var selectedTitleTextAttributes: [String: NSObject]?
+	open dynamic var selectedTitleTextAttributes: [String: NSObject]?
 
 	/**
 	 Color for the selection indicator stripe/box
 
 	 Default is `R:52, G:181, B:229`
 	 */
-	public dynamic lazy var selectionIndicatorColor = UIColor(red: 52, green: 181, blue: 229, alpha: 1)
+	open dynamic lazy var selectionIndicatorColor = UIColor(red: 52, green: 181, blue: 229, alpha: 1)
 
 	/**
 	 Color for the vertical divider between segments.
 
 	 Default is `[UIColor blackColor]`
 	 */
-	public dynamic lazy var verticalDividerColor = UIColor.blackColor()
+	open dynamic lazy var verticalDividerColor = UIColor.black
 
 	/**
 	 Opacity for the seletion indicator box.
 
 	 Default is `0.2f`
 	 */
-	public var selectionIndicatorBoxOpacity: Float = 0.2 {
+	open var selectionIndicatorBoxOpacity: Float = 0.2 {
 		didSet {
 			selectionIndicatorBoxLayer.opacity = selectionIndicatorBoxOpacity
 		}
@@ -145,31 +156,31 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Default is `1.0f`
 	 */
-	public lazy var verticalDividerWidth: CGFloat = 1
+	open lazy var verticalDividerWidth: CGFloat = 1
 
 	/**
 	 Specifies the style of the control
 
 	 Default is `.Text`
 	 */
-	public lazy var type: HMSegmentedControlType = .Text
+	open lazy var type: HMSegmentedControlType = .text
 
 	/**
 	 Specifies the style of the selection indicator.
 
 	 Default is `HMSegmentedControlSelectionStyleTextWidthStripe`
 	 */
-	public lazy var selectionStyle: HMSegmentedControlSelectionStyle = .TextWidthStripe
+	open lazy var selectionStyle: HMSegmentedControlSelectionStyle = .textWidthStripe
 
 	/**
 	 Specifies the style of the segment's width.
 
 	 Default is `.Fixed`
 	 */
-	public var segmentWidthStyle: HMSegmentedControlSegmentWidthStyle = .Fixed {
+	open var segmentWidthStyle: HMSegmentedControlSegmentWidthStyle = .fixed {
 		didSet {
-			if type == .Images && segmentWidthStyle != .Fixed {
-				segmentWidthStyle = .Fixed
+			if type == .images && segmentWidthStyle != .fixed {
+				segmentWidthStyle = .fixed
 			}
 		}
 	}
@@ -179,9 +190,9 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Default is 10
 	 */
-	public var segmentWidthStyleDynamicGap: CGFloat = 30 {
+	open var segmentWidthStyleDynamicGap: CGFloat = 30 {
 		didSet {
-			if segmentWidthStyle == .Dynamic {
+			if segmentWidthStyle == .dynamic {
 				setNeedsDisplay()
 			}
 		}
@@ -191,9 +202,9 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Default is 20
 	 */
-	public var segmentWidthStyleDynamicHeaderFooterPading: CGFloat = 20 {
+	open var segmentWidthStyleDynamicHeaderFooterPading: CGFloat = 20 {
 		didSet {
-			if segmentWidthStyle == .Dynamic {
+			if segmentWidthStyle == .dynamic {
 				setNeedsDisplay()
 			}
 		}
@@ -204,9 +215,9 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Default is `HMSegmentedControlSelectionIndicatorLocationUp`
 	 */
-	public var selectionIndicatorLocation: HMSegmentedControlSelectionIndicatorLocation = .Up {
+	open var selectionIndicatorLocation: HMSegmentedControlSelectionIndicatorLocation = .up {
 		didSet {
-			if selectionIndicatorLocation == .None {
+			if selectionIndicatorLocation == .none {
 				selectionIndicatorHeight = 0
 			}
 		}
@@ -217,7 +228,7 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Default is `HMSegmentedControlBorderTypeNone`
 	 */
-	public var borderType: [HMSegmentedControlBorderType] = [.None] {
+	open var borderType: [HMSegmentedControlBorderType] = [.none] {
 		didSet {
 			setNeedsDisplay()
 		}
@@ -228,41 +239,41 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 
 	 Default is `[UIColor blackColor]`
 	 */
-	public lazy var borderColor = UIColor.blackColor()
+	open lazy var borderColor = UIColor.black
 
 	/**
 	 Specifies the border width.
 
 	 Default is `1.0f`
 	 */
-	public lazy var borderWidth: CGFloat = 1
+	open lazy var borderWidth: CGFloat = 1
 
 	/**
 	 Default is YES. Set to NO to deny scrolling by dragging the scrollView by the user.
 	 */
-	public lazy var userDraggable = true
+	open lazy var userDraggable = true
 
 	/**
 	 Default is YES. Set to NO to deny any touch events by the user.
 	 */
-	public lazy var touchEnabled = true
+	open lazy var touchEnabled = true
 
 	/**
 	 Default is NO. Set to YES to show a vertical divider between the segments.
 	 */
-	public lazy var verticalDividerEnabled = false
+	open lazy var verticalDividerEnabled = false
 
 	/**
 	 Index of the currently selected segment.
 	 */
-	public var selectedSegmentIndex: Int = 0
+	open var selectedSegmentIndex: Int = 0
 
 	/**
 	 Height of the selection indicator. Only effective when `HMSegmentedControlSelectionStyle` is either `HMSegmentedControlSelectionStyleTextWidthStripe` or `HMSegmentedControlSelectionStyleFullWidthStripe`.
 
 	 Default is 5.0
 	 */
-	public lazy var selectionIndicatorHeight: CGFloat = 5
+	open lazy var selectionIndicatorHeight: CGFloat = 5
 
 	/**
 	 Edge insets for the selection indicator.
@@ -277,23 +288,23 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 	 bottom: 0.0f
 	 right: 0.0f
 	 */
-	public lazy var selectionIndicatorEdgeInsets = UIEdgeInsetsZero
+	open lazy var selectionIndicatorEdgeInsets = UIEdgeInsets.zero
 
 	/**
 	 Inset left and right edges of segments.
 
 	 Default is UIEdgeInsetsMake(0, 5, 0, 5)
 	 */
-	public lazy var segmentEdgeInset = UIEdgeInsetsMake(0, 5, 0, 5)
+	open lazy var segmentEdgeInset = UIEdgeInsetsMake(0, 5, 0, 5)
 
 	/**
 	 Default is YES. Set to NO to disable animation during user selection.
 	 */
-	public lazy var shouldAnimateUserSelection = true
+	open lazy var shouldAnimateUserSelection = true
 
-	public lazy var BadgeRadiu: CGFloat = 6
+	open lazy var BadgeRadiu: CGFloat = 6
 
-	public lazy var bottomBorder = false
+	open lazy var bottomBorder = false
 
 	deinit {
 		self.removeObserver(self, forKeyPath: "frame")
@@ -308,74 +319,76 @@ public class HMSegmentedControl_CodeEagle: UIControl {
 		super.init(coder: aDecoder)
 		commonInit()
 	}
+    
+    open override func awakeFromNib() {
+        super.awakeFromNib()
+        segmentWidth = 0
+        commonInit()
+    }
 
 	// MARK:- Private
-	private lazy var selectionIndicatorStripLayer = CALayer()
-	private lazy var selectionIndicatorBoxLayer = CALayer()
-	private lazy var selectionIndicatorArrowLayer = CALayer()
-	private lazy var segmentWidth: CGFloat = 1
-	private lazy var segmentWidthsArray: [CGFloat] = []
-	private lazy var scrollView: HMScrollView = HMScrollView()
-	private lazy var badgeMap: [String: CALayer] = [:]
-	private lazy var offsetXForCenterAllControl: CGFloat = 0
+	fileprivate lazy var selectionIndicatorStripLayer = CALayer()
+	fileprivate lazy var selectionIndicatorBoxLayer = CALayer()
+	fileprivate lazy var selectionIndicatorArrowLayer = CALayer()
+	fileprivate lazy var segmentWidth: CGFloat = 1
+	fileprivate lazy var segmentWidthsArray: [CGFloat] = []
+	fileprivate lazy var scrollView: HMScrollView = HMScrollView()
+	fileprivate lazy var badgeMap: [String: CALayer] = [:]
+	fileprivate lazy var offsetXForCenterAllControl: CGFloat = 0
 }
 
 //MARK:- Init
 public extension HMSegmentedControl_CodeEagle {
 
 	convenience init(sectionTitles titles: [HMSegmentTitleConvertible]) {
-		self.init(frame: CGRectZero)
+		self.init(frame: CGRect.zero)
 		sectionTitles = titles
 	}
 
 	convenience init(sectionImages off: [UIImage], sectionSelectedImages on: [UIImage]) {
-		self.init(frame: CGRectZero)
+		self.init(frame: CGRect.zero)
 		sectionImages = off
 		sectionSelectedImages = on
-		type = .Images
+		type = .images
 	}
 
 	convenience init(sectionTitles titles: [HMSegmentTitleConvertible], sectionImages off: [UIImage], sectionSelectedImages on: [UIImage]) {
 		assert(off.count == titles.count, ":\(#function): Images bounds (\(off.count)) Dont match Title bounds (\(titles.count))")
-		self.init(frame: CGRectZero)
+		self.init(frame: CGRect.zero)
 		sectionTitles = titles
 		sectionImages = off
 		sectionSelectedImages = on
-		type = .TextImages
+		type = .textImages
 	}
 
-	public override func awakeFromNib() {
-		super.awakeFromNib()
-		segmentWidth = 0
-		commonInit()
-	}
+	
 
-	private func commonInit() {
+	fileprivate func commonInit() {
 		scrollView.scrollsToTop = false
 		scrollView.showsHorizontalScrollIndicator = false
 		scrollView.showsVerticalScrollIndicator = false
 		scrollView.alwaysBounceHorizontal = true
 		addSubview(scrollView)
 
-		backgroundColor = UIColor.whiteColor()
-		opaque = false
+		backgroundColor = UIColor.white
+		isOpaque = false
 
 		selectionIndicatorBoxLayer.opacity = selectionIndicatorBoxOpacity
 		selectionIndicatorBoxLayer.borderWidth = 1
-		contentMode = .Redraw
-		addObserver(self, forKeyPath: "frame", options: .New, context: nil)
+		contentMode = .redraw
+		addObserver(self, forKeyPath: "frame", options: .new, context: nil)
 	}
 }
 
 extension HMSegmentedControl_CodeEagle {
 
-	public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String: AnyObject]?, context: UnsafeMutablePointer<Void>) {
+	open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
 		if keyPath == "frame" {
 			updateSegmentsRects()
 		}
 	}
 
-	public override func layoutSubviews() {
+	open override func layoutSubviews() {
 		super.layoutSubviews()
 		updateSegmentsRects()
 	}
@@ -383,8 +396,8 @@ extension HMSegmentedControl_CodeEagle {
 //MARK:- Drawing
 private extension HMSegmentedControl_CodeEagle {
 
-	func measureTitleAtIndex(index: Int) -> CGSize {
-		var size = CGSizeZero
+	func measureTitleAtIndex(_ index: Int) -> CGSize {
+		var size = CGSize.zero
 
 		guard let titles = sectionTitles else { return size }
 		if index < 0 || index >= titles.count { return size }
@@ -395,17 +408,17 @@ private extension HMSegmentedControl_CodeEagle {
 		if attributeTitle == nil {
 			guard let titleString = data.string else { return size }
 			if let formator = titleFormatter {
-				attributeTitle = formator(segmentedControl: self, title: titleString, index: index, selected: selected)
+				attributeTitle = formator(self, titleString, index, selected)
 			} else {
 				let attribute = selected ? resultingSelectedTitleTextAttributes : resultingTitleTextAttributes
 				attributeTitle = NSAttributedString(string: titleString, attributes: attribute)
 			}
 		}
-		size = attributeTitle?.size() ?? CGSizeZero
-		return CGRectIntegral(CGRect(origin: CGPointZero, size: size)).size
+		size = attributeTitle?.size() ?? CGSize.zero
+		return CGRect(origin: CGPoint.zero, size: size).integral.size
 	}
 
-	func attributedTitleAtIndex(index: Int) -> NSAttributedString? {
+	func attributedTitleAtIndex(_ index: Int) -> NSAttributedString? {
 		guard let titles = sectionTitles else { return nil }
 		if index >= titles.count || index < 0 { return nil }
 		let title = titles[index].title
@@ -415,37 +428,37 @@ private extension HMSegmentedControl_CodeEagle {
 		guard let titleString = title.string else { return nil }
 		var attributeTitle = title.attributedString
 		if let formator = titleFormatter {
-			attributeTitle = formator(segmentedControl: self, title: titleString, index: index, selected: selected)
+			attributeTitle = formator(self, titleString, index, selected)
 		} else {
 			var titleAttrs: [String: AnyObject] = selected ? resultingSelectedTitleTextAttributes : resultingTitleTextAttributes
 			if let titleColor = titleAttrs[NSForegroundColorAttributeName] as? UIColor {
-				titleAttrs[NSForegroundColorAttributeName] = titleColor.CGColor
+				titleAttrs[NSForegroundColorAttributeName] = titleColor.cgColor
 			}
 			attributeTitle = NSAttributedString(string: titleString, attributes: titleAttrs)
 		}
 		return attributeTitle
 	}
 
-	func addBackgroundAndBorderLayerWithRect(fullRect: CGRect) {
+	func addBackgroundAndBorderLayerWithRect(_ fullRect: CGRect) {
 		// Background layer
 		let backgroundLayer = CALayer()
 		backgroundLayer.frame = fullRect
-		scrollView.layer.insertSublayer(backgroundLayer, atIndex: 0)
+		scrollView.layer.insertSublayer(backgroundLayer, at: 0)
 
 		// Border layer
 		let width = fullRect.size.width
 		let height = fullRect.size.height
 		let total = [
-			HMSegmentedControlBorderType.Top: CGRectMake(0, 0, width, borderWidth),
-			HMSegmentedControlBorderType.Left: CGRectMake(0, 0, borderWidth, height),
-			HMSegmentedControlBorderType.Bottom: CGRectMake(0, height - borderWidth, width, borderWidth),
-			HMSegmentedControlBorderType.Right: CGRectMake(width - borderWidth, 0, borderWidth, height)
+			HMSegmentedControlBorderType.top: CGRect(x: 0, y: 0, width: width, height: borderWidth),
+			HMSegmentedControlBorderType.left: CGRect(x: 0, y: 0, width: borderWidth, height: height),
+			HMSegmentedControlBorderType.bottom: CGRect(x: 0, y: height - borderWidth, width: width, height: borderWidth),
+			HMSegmentedControlBorderType.right: CGRect(x: width - borderWidth, y: 0, width: borderWidth, height: height)
 		]
 		for (type, frame) in total {
 			if !borderType.contains(type) { continue }
 			let borderLayer = CALayer()
 			borderLayer.frame = frame
-			borderLayer.backgroundColor = borderColor.CGColor
+			borderLayer.backgroundColor = borderColor.cgColor
 			backgroundLayer.addSublayer(borderLayer)
 		}
 	}
@@ -457,54 +470,54 @@ private extension HMSegmentedControl_CodeEagle {
 
 		let arrowPath = UIBezierPath()
 
-		var p1 = CGPointZero
-		var p2 = CGPointZero
-		var p3 = CGPointZero
+		var p1 = CGPoint.zero
+		var p2 = CGPoint.zero
+		var p3 = CGPoint.zero
 
-		if selectionIndicatorLocation == .Down {
-			p1 = CGPointMake(selectionIndicatorArrowLayer.bounds.size.width / 2, 0)
-			p2 = CGPointMake(0, selectionIndicatorArrowLayer.bounds.size.height)
-			p3 = CGPointMake(selectionIndicatorArrowLayer.bounds.size.width, selectionIndicatorArrowLayer.bounds.size.height)
+		if selectionIndicatorLocation == .down {
+			p1 = CGPoint(x: selectionIndicatorArrowLayer.bounds.size.width / 2, y: 0)
+			p2 = CGPoint(x: 0, y: selectionIndicatorArrowLayer.bounds.size.height)
+			p3 = CGPoint(x: selectionIndicatorArrowLayer.bounds.size.width, y: selectionIndicatorArrowLayer.bounds.size.height)
 		}
 
-		if selectionIndicatorLocation == .Up {
-			p1 = CGPointMake(selectionIndicatorArrowLayer.bounds.size.width / 2, selectionIndicatorArrowLayer.bounds.size.height)
-			p2 = CGPointMake(selectionIndicatorArrowLayer.bounds.size.width, 0)
-			p3 = CGPointMake(0, 0)
+		if selectionIndicatorLocation == .up {
+			p1 = CGPoint(x: selectionIndicatorArrowLayer.bounds.size.width / 2, y: selectionIndicatorArrowLayer.bounds.size.height)
+			p2 = CGPoint(x: selectionIndicatorArrowLayer.bounds.size.width, y: 0)
+			p3 = CGPoint(x: 0, y: 0)
 		}
-		arrowPath.moveToPoint(p1)
-		arrowPath.addLineToPoint(p2)
-		arrowPath.addLineToPoint(p3)
-		arrowPath.closePath()
+		arrowPath.move(to: p1)
+		arrowPath.addLine(to: p2)
+		arrowPath.addLine(to: p3)
+		arrowPath.close()
 
 		let maskLayer = CAShapeLayer()
 		maskLayer.frame = selectionIndicatorArrowLayer.bounds
-		maskLayer.path = arrowPath.CGPath
+		maskLayer.path = arrowPath.cgPath
 		selectionIndicatorArrowLayer.mask = maskLayer
 	}
 
 	func frameForSelectionIndicator() -> CGRect {
 		var indicatorYOffset: CGFloat = 0
 
-		if selectionIndicatorLocation == .Down {
+		if selectionIndicatorLocation == .down {
 			indicatorYOffset = bounds.size.height - selectionIndicatorHeight + selectionIndicatorEdgeInsets.bottom
 		}
 
-		if selectionIndicatorLocation == .Up {
+		if selectionIndicatorLocation == .up {
 			indicatorYOffset = selectionIndicatorEdgeInsets.top
 		}
 
 		var sectionWidth: CGFloat = 0
 		let index = selectedSegmentIndex
-		if type == .Text {
+		if type == .text {
 			sectionWidth = measureTitleAtIndex(index).width
-		} else if type == .Images {
+		} else if type == .images {
 			let idx = Int(index)
 			if idx < sectionImages?.count {
 				let sectionImage = sectionImages?[idx]
 				sectionWidth = sectionImage?.size.width ?? 0
 			}
-		} else if type == .TextImages {
+		} else if type == .textImages {
 			let stringWidth = measureTitleAtIndex(index).width
 			var imageWidth: CGFloat = 0
 			let idx = Int(index)
@@ -516,87 +529,87 @@ private extension HMSegmentedControl_CodeEagle {
 		}
 
 		let floatIndex = CGFloat(index)
-		if selectionStyle == .Arrow {
+		if selectionStyle == .arrow {
 			let widthToStartOfSelectedIndex = (segmentWidth * floatIndex)
 			let widthToEndOfSelectedSegment = widthToStartOfSelectedIndex + segmentWidth
 			let x = widthToStartOfSelectedIndex + ((widthToEndOfSelectedSegment - widthToStartOfSelectedIndex) / 2) - (selectionIndicatorHeight / 2)
-			return CGRectMake(x - (selectionIndicatorHeight / 2), indicatorYOffset, selectionIndicatorHeight * 2, selectionIndicatorHeight)
+			return CGRect(x: x - (selectionIndicatorHeight / 2), y: indicatorYOffset, width: selectionIndicatorHeight * 2, height: selectionIndicatorHeight)
 		} else {
-			if selectionStyle == .TextWidthStripe &&
+			if selectionStyle == .textWidthStripe &&
 			sectionWidth <= segmentWidth &&
-			segmentWidthStyle != .Dynamic {
+			segmentWidthStyle != .dynamic {
 
 				let widthToStartOfSelectedIndex = (segmentWidth * floatIndex)
 				let widthToEndOfSelectedSegment = widthToStartOfSelectedIndex + segmentWidth
 				let x = ((widthToEndOfSelectedSegment - widthToStartOfSelectedIndex) / 2) + (widthToStartOfSelectedIndex - sectionWidth / 2) + offsetXForCenterAllControl
-				return CGRectMake(x + selectionIndicatorEdgeInsets.left, indicatorYOffset, sectionWidth - selectionIndicatorEdgeInsets.right, selectionIndicatorHeight);
+				return CGRect(x: x + selectionIndicatorEdgeInsets.left, y: indicatorYOffset, width: sectionWidth - selectionIndicatorEdgeInsets.right, height: selectionIndicatorHeight);
 			} else {
-				if segmentWidthStyle == .Dynamic {
+				if segmentWidthStyle == .dynamic {
 
 					let x = selectedSegmentOffset + selectionIndicatorEdgeInsets.left + offsetXForCenterAllControl
 					let y = indicatorYOffset
 					let idx = Int(index)
 					let width = segmentWidthsArray[idx] - selectionIndicatorEdgeInsets.right
 					let height = selectionIndicatorHeight + selectionIndicatorEdgeInsets.bottom
-					return CGRectMake(x, y, width, height)
+					return CGRect(x: x, y: y, width: width, height: height)
 				}
-				return CGRectMake(
-					(segmentWidth + selectionIndicatorEdgeInsets.left) * floatIndex + offsetXForCenterAllControl,
-					indicatorYOffset,
-					segmentWidth - selectionIndicatorEdgeInsets.right,
-					selectionIndicatorHeight)
+				return CGRect(
+					x: (segmentWidth + selectionIndicatorEdgeInsets.left) * floatIndex + offsetXForCenterAllControl,
+					y: indicatorYOffset,
+					width: segmentWidth - selectionIndicatorEdgeInsets.right,
+					height: selectionIndicatorHeight)
 			}
 		}
 	}
 
 	func frameForFillerSelectionIndicator() -> CGRect {
-		if segmentWidthStyle == .Dynamic {
+		if segmentWidthStyle == .dynamic {
 			let idx = Int(UInt(selectedSegmentIndex))
 			var width: CGFloat = 0
 			if idx < segmentWidthsArray.count {
 				width = segmentWidthsArray[idx]
 			}
-			return CGRectMake(selectedSegmentOffset, 0, width, CGRectGetHeight(frame))
+			return CGRect(x: selectedSegmentOffset, y: 0, width: width, height: frame.height)
 		}
-		return CGRectMake(segmentWidth * CGFloat(selectedSegmentIndex), 0, segmentWidth, CGRectGetHeight(self.frame))
+		return CGRect(x: segmentWidth * CGFloat(selectedSegmentIndex), y: 0, width: segmentWidth, height: self.frame.height)
 	}
 
 	func updateSegmentsRects() {
 
-		scrollView.contentInset = UIEdgeInsetsZero
-		scrollView.frame = CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame))
+		scrollView.contentInset = UIEdgeInsets.zero
+		scrollView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
 
 		if sectionCount > 0 {
 			segmentWidth = frame.size.width / CGFloat(sectionCount)
 		}
 
-		if let titles = sectionTitles where type == .Text {
+		if let titles = sectionTitles , type == .text {
 			var mutableSegmentWidths: [CGFloat] = []
 			for index in 0 ..< titles.count {
 				let stringWidth = measureTitleAtIndex(index).width + segmentEdgeInset.left + segmentEdgeInset.right
-				if segmentWidthStyle == .Fixed {
+				if segmentWidthStyle == .fixed {
 					segmentWidth = max(stringWidth, segmentWidth)
-				} else if segmentWidthStyle == .Dynamic {
+				} else if segmentWidthStyle == .dynamic {
 					mutableSegmentWidths.append(stringWidth)
 				}
 			}
 			if mutableSegmentWidths.count > 0 {
 				segmentWidthsArray = mutableSegmentWidths
 			}
-		} else if let images = sectionImages where type == .Images {
+		} else if let images = sectionImages , type == .images {
 			for item in images {
 				let imageWidth = item.size.width + segmentEdgeInset.left + segmentEdgeInset.right
 				segmentWidth = max(imageWidth, segmentWidth)
 			}
-		} else if let titles = sectionTitles, images = sectionImages where type == .TextImages {
+		} else if let titles = sectionTitles, let images = sectionImages , type == .textImages {
 			var mutableSegmentWidths: [CGFloat] = []
 			for index in 0 ..< titles.count {
 				let stringWidth = measureTitleAtIndex(index).width + segmentEdgeInset.left + segmentEdgeInset.right
 				let imageWidth = images[index].size.width + segmentEdgeInset.left + segmentEdgeInset.right
 
-				if segmentWidthStyle == .Fixed {
+				if segmentWidthStyle == .fixed {
 					segmentWidth = max(stringWidth, segmentWidth)
-				} else if segmentWidthStyle == .Dynamic {
+				} else if segmentWidthStyle == .dynamic {
 					let width = max(imageWidth, stringWidth)
 					mutableSegmentWidths.append(width)
 				}
@@ -605,16 +618,16 @@ private extension HMSegmentedControl_CodeEagle {
 				segmentWidthsArray = mutableSegmentWidths
 			}
 		}
-		scrollView.scrollEnabled = userDraggable
-		scrollView.contentSize = CGSizeMake(totalSegmentedControlWidth, frame.size.height)
+		scrollView.isScrollEnabled = userDraggable
+		scrollView.contentSize = CGSize(width: totalSegmentedControlWidth, height: frame.size.height)
 	}
 
 	var sectionCount: UInt {
 		var count: UInt = 0
-		if type == .Text {
+		if type == .text {
 			let acount = sectionTitles?.count ?? 0
 			count = UInt(acount)
-		} else if type == .Images || type == .TextImages {
+		} else if type == .images || type == .textImages {
 			let acount = sectionImages?.count ?? 0
 			count = UInt(acount)
 		}
@@ -627,7 +640,7 @@ private extension HMSegmentedControl_CodeEagle {
 		for width in segmentWidthsArray {
 			if selectedSegmentIndex == i { break }
 			offset += width
-			if segmentWidthStyle == .Dynamic {
+			if segmentWidthStyle == .dynamic {
 				offset += segmentWidthStyleDynamicGap
 			}
 			i += 1
@@ -638,31 +651,31 @@ private extension HMSegmentedControl_CodeEagle {
 //MARK:- DrawRect
 extension HMSegmentedControl_CodeEagle {
 
-	public override func drawRect(rect: CGRect) {
+	open override func draw(_ rect: CGRect) {
 		backgroundColor?.set()
 		UIRectFill(bounds)
 		updateOffsetXForCEnterAllControl()
 
-		selectionIndicatorArrowLayer.backgroundColor = selectionIndicatorColor.CGColor
-		selectionIndicatorStripLayer.backgroundColor = selectionIndicatorColor.CGColor
-		selectionIndicatorBoxLayer.backgroundColor = selectionIndicatorColor.CGColor
-		selectionIndicatorBoxLayer.borderColor = selectionIndicatorColor.CGColor
+		selectionIndicatorArrowLayer.backgroundColor = selectionIndicatorColor.cgColor
+		selectionIndicatorStripLayer.backgroundColor = selectionIndicatorColor.cgColor
+		selectionIndicatorBoxLayer.backgroundColor = selectionIndicatorColor.cgColor
+		selectionIndicatorBoxLayer.borderColor = selectionIndicatorColor.cgColor
 
-		scrollView.layer.backgroundColor = backgroundColor?.CGColor
+		scrollView.layer.backgroundColor = backgroundColor?.cgColor
 		scrollView.layer.sublayers = nil
 
 		let oldRect = rect
 		switch type {
-		case .Text: drawText(oldRect)
-		case .Images: drawImage()
-		case .TextImages: drawTextImage()
+		case .text: drawText(oldRect)
+		case .images: drawImage()
+		case .textImages: drawTextImage()
 		}
 		addBadge()
 		addSelectionIndicators()
 		addSeperator()
 	}
 
-	private func updateOffsetXForCEnterAllControl() {
+	fileprivate func updateOffsetXForCEnterAllControl() {
 		let totalWidth = totalSegmentedControlWidth
 		var offsetX: CGFloat = 0
 
@@ -670,14 +683,14 @@ extension HMSegmentedControl_CodeEagle {
 			offsetX = (bounds.width - totalWidth) / 2
 		}
 
-		if segmentWidthStyle == .Dynamic {
+		if segmentWidthStyle == .dynamic {
 			offsetX += segmentWidthStyleDynamicHeaderFooterPading
 		}
 
 		offsetXForCenterAllControl = offsetX
 	}
 
-	private func drawText(oldRect: CGRect) {
+	fileprivate func drawText(_ oldRect: CGRect) {
 		guard let titles = sectionTitles else { return }
 
 		for idx in 0 ..< titles.count {
@@ -685,65 +698,65 @@ extension HMSegmentedControl_CodeEagle {
 			let size = measureTitleAtIndex(idx)
 			let stringWidth = size.width
 			let stringHeight = size.height
-			var rectDiv = CGRectZero
-			var fullRect = CGRectZero
+			var rectDiv = CGRect.zero
+			var fullRect = CGRect.zero
 
-			let locationUp: CGFloat = selectionIndicatorLocation == .Up ? 1 : 0
-			let selectionStyleNotBox: CGFloat = selectionStyle != .Box ? 1 : 0
-			let toRound = (CGRectGetHeight(frame) - selectionStyleNotBox * selectionIndicatorHeight) / 2 - stringHeight / 2 + selectionIndicatorHeight * locationUp
+			let locationUp: CGFloat = selectionIndicatorLocation == .up ? 1 : 0
+			let selectionStyleNotBox: CGFloat = selectionStyle != .box ? 1 : 0
+			let toRound = (frame.height - selectionStyleNotBox * selectionIndicatorHeight) / 2 - stringHeight / 2 + selectionIndicatorHeight * locationUp
 			var y = round(toRound)
 
-			var rect = CGRectZero
-			if segmentWidthStyle == .Fixed {
+			var rect = CGRect.zero
+			if segmentWidthStyle == .fixed {
 				var x = segmentWidth * fIndex + (segmentWidth - stringWidth) / 2 + offsetXForCenterAllControl
-				rect = CGRectMake(x, y, stringWidth, stringHeight)
+				rect = CGRect(x: x, y: y, width: stringWidth, height: stringHeight)
 				x = segmentWidth * fIndex - verticalDividerWidth / 2
 				y = selectionIndicatorHeight * 2
 				let height = frame.size.height - selectionIndicatorHeight * 4
-				rectDiv = CGRectMake(x, y, verticalDividerWidth, height)
-				fullRect = CGRectMake(segmentWidth * fIndex, 0, segmentWidth, oldRect.size.height)
-			} else if segmentWidthStyle == .Dynamic {
+				rectDiv = CGRect(x: x, y: y, width: verticalDividerWidth, height: height)
+				fullRect = CGRect(x: segmentWidth * fIndex, y: 0, width: segmentWidth, height: oldRect.size.height)
+			} else if segmentWidthStyle == .dynamic {
 				var xOffset: CGFloat = offsetXForCenterAllControl
 
-				for (i, width) in segmentWidthsArray.enumerate() {
+				for (i, width) in segmentWidthsArray.enumerated() {
 					if (idx == i) { break }
 					xOffset = xOffset + width + segmentWidthStyleDynamicGap
 				}
 				let widthForIndex: CGFloat = (segmentWidthsArray[safe: idx] ?? 0)
-				rect = CGRectMake(xOffset, y, widthForIndex, stringHeight)
-				fullRect = CGRectMake(xOffset, 0, widthForIndex, oldRect.size.height)
-				rectDiv = CGRectMake(
-					xOffset - verticalDividerWidth / 2,
-					selectionIndicatorHeight * 2,
-					verticalDividerWidth,
-					frame.size.height - selectionIndicatorHeight * 4)
+				rect = CGRect(x: xOffset, y: y, width: widthForIndex, height: stringHeight)
+				fullRect = CGRect(x: xOffset, y: 0, width: widthForIndex, height: oldRect.size.height)
+				rectDiv = CGRect(
+					x: xOffset - verticalDividerWidth / 2,
+					y: selectionIndicatorHeight * 2,
+					width: verticalDividerWidth,
+					height: frame.size.height - selectionIndicatorHeight * 4)
 			}
 
 			// Fix rect position/size to avoid blurry labels
-			rect = CGRectMake(ceil(rect.origin.x), ceil(rect.origin.y), ceil(rect.size.width), ceil(rect.size.height))
+			rect = CGRect(x: ceil(rect.origin.x), y: ceil(rect.origin.y), width: ceil(rect.size.width), height: ceil(rect.size.height))
 			let text = attributedTitleAtIndex(idx)
 			var titleLayer = CATextLayer()
 
-			if backgroundColor != nil && backgroundColor != UIColor.clearColor() {
+			if backgroundColor != nil && backgroundColor != UIColor.clear {
 				let layer = OpaqueTextLayer()
 				layer.setBackgroundC(backgroundColor)
 				titleLayer = layer
-				titleLayer.opaque = true
+				titleLayer.isOpaque = true
 			}
 			titleLayer.frame = rect
 			titleLayer.alignmentMode = kCAAlignmentCenter
             titleLayer.truncationMode = iOSTen ? kCATruncationNone : kCATruncationEnd
             titleLayer.string = text
-			titleLayer.contentsScale = UIScreen.mainScreen().scale
+			titleLayer.contentsScale = UIScreen.main.scale
 			scrollView.layer.addSublayer(titleLayer)
 
 			// Badge
 			if let title = text?.string {
 				let dot = badgeDotForTitle(title)
-				let offsetX: CGFloat = segmentWidthStyle == .Dynamic ? BadgeRadiu : 0
-				let offsetY: CGFloat = segmentWidthStyle == .Dynamic ? BadgeRadiu / 2: 0
-				let centerPoint = CGPointMake(CGRectGetMaxX(titleLayer.frame) - offsetX, CGRectGetMinY(titleLayer.frame) - offsetY)
-				dot?.frame = CGRectMake(centerPoint.x, centerPoint.y, BadgeRadiu, BadgeRadiu);
+				let offsetX: CGFloat = segmentWidthStyle == .dynamic ? BadgeRadiu : 0
+				let offsetY: CGFloat = segmentWidthStyle == .dynamic ? BadgeRadiu / 2: 0
+				let centerPoint = CGPoint(x: titleLayer.frame.maxX - offsetX, y: titleLayer.frame.minY - offsetY)
+				dot?.frame = CGRect(x: centerPoint.x, y: centerPoint.y, width: BadgeRadiu, height: BadgeRadiu);
 			}
 
 			// Vertical Divider
@@ -752,53 +765,53 @@ extension HMSegmentedControl_CodeEagle {
 		}
 	}
 
-	private func drawImage() {
+	fileprivate func drawImage() {
 		guard let value = sectionImages else { return }
-		for (idx, iconImage) in value.enumerate() {
+		for (idx, iconImage) in value.enumerated() {
 			let fIdx = CGFloat(idx)
 			let icon = iconImage
 			let imageWidth = icon.size.width
 			let imageHeight = icon.size.height
-			let y = round(CGRectGetHeight(frame) - selectionIndicatorHeight) / 2 - imageHeight / 2 + ((selectionIndicatorLocation == .Up) ? selectionIndicatorHeight : 0)
+			let y = round(frame.height - selectionIndicatorHeight) / 2 - imageHeight / 2 + ((selectionIndicatorLocation == .up) ? selectionIndicatorHeight : 0)
 			let x = segmentWidth * fIdx + (segmentWidth - imageWidth) / 2.0
-			let rect = CGRectMake(x, y, imageWidth, imageHeight)
+			let rect = CGRect(x: x, y: y, width: imageWidth, height: imageHeight)
 
 			let imageLayer = CALayer()
 			imageLayer.frame = rect
-			imageLayer.contents = icon.CGImage;
+			imageLayer.contents = icon.cgImage;
 			if selectedSegmentIndex == idx {
-				imageLayer.contents = sectionSelectedImages?[safe: idx]?.CGImage ?? icon.CGImage
+				imageLayer.contents = sectionSelectedImages?[safe: idx]?.cgImage ?? icon.cgImage
 			}
 			scrollView.layer.addSublayer(imageLayer)
 			// Vertical Divider
-			let rectDiv = CGRectMake((segmentWidth * fIdx) - (verticalDividerWidth / 2), selectionIndicatorHeight * 2, verticalDividerWidth, self.frame.size.height - (selectionIndicatorHeight * 4))
+			let rectDiv = CGRect(x: (segmentWidth * fIdx) - (verticalDividerWidth / 2), y: selectionIndicatorHeight * 2, width: verticalDividerWidth, height: self.frame.size.height - (selectionIndicatorHeight * 4))
 			addVerticalDivider(rectDiv, idx: idx)
 			addBackgroundAndBorderLayerWithRect(rect)
 		}
 	}
 
-	private func drawTextImage() {
+	fileprivate func drawTextImage() {
 		guard let value = sectionImages else { return }
 
-		for (idx, iconImage) in value.enumerate() {
+		for (idx, iconImage) in value.enumerated() {
 			let fIdx = CGFloat(idx)
 			let icon = iconImage
 			let imageWidth = icon.size.width
 			let imageHeight = icon.size.height
 			let stringHeight = measureTitleAtIndex(idx).height
-			let yOffset = round(((CGRectGetHeight(frame) - selectionIndicatorHeight) / 2) - (stringHeight / 2))
+			let yOffset = round(((frame.height - selectionIndicatorHeight) / 2) - (stringHeight / 2))
 			var imageXOffset = segmentEdgeInset.left // Start with edge inset
 			var textXOffset = segmentEdgeInset.left
 			var textWidth: CGFloat = 0
 
-			if segmentWidthStyle == .Fixed {
+			if segmentWidthStyle == .fixed {
 				imageXOffset = segmentWidth * fIdx + segmentWidth / 2 - imageWidth / 2
 				textXOffset = segmentWidth * fIdx
 				textWidth = segmentWidth
-			} else if segmentWidthStyle == .Dynamic {
+			} else if segmentWidthStyle == .dynamic {
 				// When we are drawing dynamic widths, we need to loop the widths array to calculate the xOffset
 				var xOffset: CGFloat = 0
-				for (i, width) in segmentWidthsArray.enumerate() {
+				for (i, width) in segmentWidthsArray.enumerated() {
 					if idx == i { break }
 					xOffset += width
 				}
@@ -808,48 +821,48 @@ extension HMSegmentedControl_CodeEagle {
 				textWidth = width
 			}
 
-			let imageYOffset = round((CGRectGetHeight(frame) - selectionIndicatorHeight) / 2)
-			let imageRect = CGRectMake(imageXOffset, imageYOffset, imageWidth, imageHeight)
+			let imageYOffset = round((frame.height - selectionIndicatorHeight) / 2)
+			let imageRect = CGRect(x: imageXOffset, y: imageYOffset, width: imageWidth, height: imageHeight)
 
 			let imageLayer = CALayer()
 			imageLayer.frame = imageRect
-			imageLayer.contents = icon.CGImage
+			imageLayer.contents = icon.cgImage
 			if selectedSegmentIndex == idx {
-				imageLayer.contents = sectionSelectedImages?[safe: idx]?.CGImage ?? icon.CGImage
+				imageLayer.contents = sectionSelectedImages?[safe: idx]?.cgImage ?? icon.cgImage
 			}
 			scrollView.layer.addSublayer(imageLayer)
 
 			// Fix rect position/size to avoid blurry labels
-			let textRect = CGRectMake(ceil(textXOffset), ceil(yOffset), ceil(textWidth), ceil(stringHeight))
+			let textRect = CGRect(x: ceil(textXOffset), y: ceil(yOffset), width: ceil(textWidth), height: ceil(stringHeight))
 			let text = attributedTitleAtIndex(idx)
 			let titleLayer = CATextLayer()
 			titleLayer.frame = textRect
 			titleLayer.alignmentMode = kCAAlignmentCenter
 			titleLayer.string = text
 			titleLayer.truncationMode = kCATruncationEnd
-			titleLayer.contentsScale = UIScreen.mainScreen().scale
+			titleLayer.contentsScale = UIScreen.main.scale
 			scrollView.layer.addSublayer(titleLayer)
 
 			// Badge
 			if let title = text?.string {
 				let dot = badgeDotForTitle(title)
-				let centerPoint = CGPointMake(CGRectGetMaxX(titleLayer.frame), CGRectGetMinY(titleLayer.frame))
-				dot?.frame = CGRectMake(centerPoint.x, centerPoint.y, BadgeRadiu, BadgeRadiu);
+				let centerPoint = CGPoint(x: titleLayer.frame.maxX, y: titleLayer.frame.minY)
+				dot?.frame = CGRect(x: centerPoint.x, y: centerPoint.y, width: BadgeRadiu, height: BadgeRadiu);
 			}
 			addBackgroundAndBorderLayerWithRect(imageRect)
 		}
 	}
 
-	private func addVerticalDivider(rect: CGRect, idx: Int) {
+	fileprivate func addVerticalDivider(_ rect: CGRect, idx: Int) {
 		if verticalDividerEnabled && idx > 0 {
 			let verticalDividerLayer = CALayer()
 			verticalDividerLayer.frame = rect
-			verticalDividerLayer.backgroundColor = self.verticalDividerColor.CGColor
+			verticalDividerLayer.backgroundColor = self.verticalDividerColor.cgColor
 			scrollView.layer.addSublayer(verticalDividerLayer)
 		}
 	}
 
-	private func addBadge() {
+	fileprivate func addBadge() {
 		for key in badgeMap.keys {
 			if let layer = self.badgeMap[key] {
 				scrollView.layer.addSublayer(layer)
@@ -857,9 +870,9 @@ extension HMSegmentedControl_CodeEagle {
 		}
 	}
 
-	private func addSelectionIndicators() {
-		if selectedSegmentIndex == HMSegmentedControlIndex.NoSegment.rawValue { return }
-		if selectionStyle == .Arrow {
+	fileprivate func addSelectionIndicators() {
+		if selectedSegmentIndex == HMSegmentedControlIndex.noSegment.rawValue { return }
+		if selectionStyle == .arrow {
 			if selectionIndicatorArrowLayer.superlayer == nil {
 				setArrowFrame()
 				scrollView.layer.addSublayer(selectionIndicatorArrowLayer)
@@ -869,24 +882,24 @@ extension HMSegmentedControl_CodeEagle {
 				selectionIndicatorStripLayer.frame = frameForSelectionIndicator()
 				scrollView.layer.addSublayer(selectionIndicatorStripLayer)
 
-				if selectionStyle == .Box && selectionIndicatorBoxLayer.superlayer == nil {
+				if selectionStyle == .box && selectionIndicatorBoxLayer.superlayer == nil {
 					self.selectionIndicatorBoxLayer.frame = frameForFillerSelectionIndicator()
-					scrollView.layer.insertSublayer(selectionIndicatorBoxLayer, atIndex: 0)
+					scrollView.layer.insertSublayer(selectionIndicatorBoxLayer, at: 0)
 				}
 			}
 		}
 	}
 
-	private func addSeperator() {
+	fileprivate func addSeperator() {
 		if bottomBorder {
 			let line = CALayer()
-			line.frame = CGRectMake(0, frame.height - 0.5, frame.width, 0.5)
-			line.backgroundColor = UIColor.lightGrayColor().CGColor
+			line.frame = CGRect(x: 0, y: frame.height - 0.5, width: frame.width, height: 0.5)
+			line.backgroundColor = UIColor.lightGray.cgColor
 			layer.addSublayer(line)
 		}
 	}
 
-	public override func willMoveToSuperview(newSuperview: UIView?) {
+	open override func willMove(toSuperview newSuperview: UIView?) {
 		if newSuperview == nil { return }
 		if sectionTitles != nil || sectionImages != nil {
 			updateSegmentsRects()
@@ -896,13 +909,13 @@ extension HMSegmentedControl_CodeEagle {
 //MARK:- Touch
 extension HMSegmentedControl_CodeEagle {
 
-	public override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-		guard let location = touches.first?.locationInView(self) else { return }
-		if !CGRectContainsPoint(bounds, location) { return }
+	open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+		guard let location = touches.first?.location(in: self) else { return }
+		if !bounds.contains(location) { return }
 		var segment = 0
-		if segmentWidthStyle == .Fixed {
+		if segmentWidthStyle == .fixed {
 			segment = Int((location.x + scrollView.contentOffset.x - offsetXForCenterAllControl) / segmentWidth)
-		} else if segmentWidthStyle == .Dynamic {
+		} else if segmentWidthStyle == .dynamic {
 			var widthLeft = location.x + scrollView.contentOffset.x - offsetXForCenterAllControl
 			for width in segmentWidthsArray {
 				widthLeft -= width + segmentWidthStyleDynamicGap
@@ -913,9 +926,9 @@ extension HMSegmentedControl_CodeEagle {
 
 		var sectionsCount = 0
 
-		if type == .Images {
+		if type == .images {
 			sectionsCount = sectionImages?.count ?? 0
-		} else if type == .TextImages || type == .Text {
+		} else if type == .textImages || type == .text {
 			sectionsCount = sectionTitles?.count ?? 0
 		}
 		if segment != selectedSegmentIndex && segment < sectionsCount {
@@ -928,17 +941,17 @@ extension HMSegmentedControl_CodeEagle {
 //MARK:- Index Change
 extension HMSegmentedControl_CodeEagle {
 
-	public func setSelectedSegmentIndex(index: Int, animated: Bool = false, notify: Bool = false) {
+	public func setSelectedSegmentIndex(_ index: Int, animated: Bool = false, notify: Bool = false) {
 		if selectedSegmentIndex == index { return }
 		selectedSegmentIndex = index
 		indexChange(animated, notify: notify)
 	}
 
-	func indexChange(animated: Bool = false, notify: Bool = false) {
+	func indexChange(_ animated: Bool = false, notify: Bool = false) {
 		let index = selectedSegmentIndex
 		setNeedsDisplay()
 
-		if selectedSegmentIndex == HMSegmentedControlIndex.NoSegment.rawValue {
+		if selectedSegmentIndex == HMSegmentedControlIndex.noSegment.rawValue {
 			[selectionIndicatorArrowLayer, selectionIndicatorStripLayer, selectionIndicatorBoxLayer].forEach({ (layer) -> () in
 				layer.removeFromSuperlayer()
 			})
@@ -949,7 +962,7 @@ extension HMSegmentedControl_CodeEagle {
 				// If the selected segment layer is not added to the super layer, that means no
 				// index is currently selected, so add the layer then move it to the new
 				// segment index without animating.
-				if selectionStyle == .Arrow {
+				if selectionStyle == .arrow {
 					if selectionIndicatorArrowLayer.superlayer == nil {
 						scrollView.layer.addSublayer(selectionIndicatorArrowLayer)
 						setSelectedSegmentIndex(index, notify: true)
@@ -959,8 +972,8 @@ extension HMSegmentedControl_CodeEagle {
 					if selectionIndicatorStripLayer.superlayer == nil {
 						scrollView.layer.addSublayer(selectionIndicatorStripLayer)
 
-						if selectionStyle == .Box && selectionIndicatorBoxLayer.superlayer == nil {
-							scrollView.layer.insertSublayer(selectionIndicatorBoxLayer, atIndex: 0)
+						if selectionStyle == .box && selectionIndicatorBoxLayer.superlayer == nil {
+							scrollView.layer.insertSublayer(selectionIndicatorBoxLayer, at: 0)
 						}
 						setSelectedSegmentIndex(index, notify: true)
 						return
@@ -1005,9 +1018,9 @@ extension HMSegmentedControl_CodeEagle {
 		}
 	}
 
-	func notifyForSegmentChangeToIndex(index: UInt) {
+	func notifyForSegmentChangeToIndex(_ index: UInt) {
 		if superview != nil {
-			sendActionsForControlEvents(UIControlEvents.ValueChanged)
+			sendActions(for: UIControlEvents.valueChanged)
 		}
 		indexChangeBlock?(index)
 	}
@@ -1016,32 +1029,32 @@ extension HMSegmentedControl_CodeEagle {
 private extension HMSegmentedControl_CodeEagle {
 
 	var totalSegmentedControlWidth: CGFloat {
-		if segmentWidthStyle == .Fixed {
+		if segmentWidthStyle == .fixed {
 			return segmentWidth * CGFloat(sectionCount)
 		} else {
-			return segmentWidthsArray.reduce(0, combine: +) + CGFloat(sectionCount - 1) * segmentWidthStyleDynamicGap + segmentWidthStyleDynamicHeaderFooterPading * 2
+			return segmentWidthsArray.reduce(0, +) + CGFloat(sectionCount - 1) * segmentWidthStyleDynamicGap + segmentWidthStyleDynamicHeaderFooterPading * 2
 		}
 	}
 
-	func scrollToSelectedSegmentIndex(animated: Bool) {
-		var rectForSelectedIndex = CGRectZero
+	func scrollToSelectedSegmentIndex(_ animated: Bool) {
+		var rectForSelectedIndex = CGRect.zero
 		var _selectedSegmentOffset: CGFloat = 0
-		if segmentWidthStyle == .Fixed {
-			rectForSelectedIndex = CGRectMake(
-				segmentWidth * CGFloat(selectedSegmentIndex),
-				0,
-				segmentWidth,
-				frame.size.height)
+		if segmentWidthStyle == .fixed {
+			rectForSelectedIndex = CGRect(
+				x: segmentWidth * CGFloat(selectedSegmentIndex),
+				y: 0,
+				width: segmentWidth,
+				height: frame.size.height)
 
-			_selectedSegmentOffset = (CGRectGetWidth(frame) / 2) - (segmentWidth / 2)
-		} else if segmentWidthStyle == .Dynamic {
+			_selectedSegmentOffset = (frame.width / 2) - (segmentWidth / 2)
+		} else if segmentWidthStyle == .dynamic {
 			let offsetter = selectedSegmentOffset
 			var width: CGFloat = 0
 			if selectedSegmentIndex < segmentWidthsArray.count {
 				width = segmentWidthsArray[selectedSegmentIndex]
 			}
-			rectForSelectedIndex = CGRectMake(offsetter, 0, width, frame.size.height)
-			_selectedSegmentOffset = (CGRectGetWidth(self.frame) / 2) - (width / 2)
+			rectForSelectedIndex = CGRect(x: offsetter, y: 0, width: width, height: frame.size.height)
+			_selectedSegmentOffset = (self.frame.width / 2) - (width / 2)
 		}
 
 		var rectToScrollTo = rectForSelectedIndex
@@ -1056,8 +1069,8 @@ private extension HMSegmentedControl_CodeEagle {
 
 	var resultingTitleTextAttributes: [String: NSObject] {
 		var defaults = [
-			NSFontAttributeName: UIFont.systemFontOfSize(19),
-			NSForegroundColorAttributeName: UIColor.blackColor()
+			NSFontAttributeName: UIFont.systemFont(ofSize: 19),
+			NSForegroundColorAttributeName: UIColor.black
 		]
 		if let attribute = titleTextAttributes {
 			for key in attribute.keys {
@@ -1081,32 +1094,32 @@ private extension HMSegmentedControl_CodeEagle {
 //MARK:- Badge
 extension HMSegmentedControl_CodeEagle {
 
-	public func toggleMatchTitle(title: HMSegmentTitleConvertible?, hide: Bool) {
+	public func toggleMatchTitle(_ title: HMSegmentTitleConvertible?, hide: Bool) {
 		guard let key = title?.title.string ?? title?.title.attributedString?.string else { return }
 		hide ? removeBadgeForTitle(key) : addBadgeForTitle(key)
 	}
 
-	private func addBadgeForTitle(title: String) {
+	fileprivate func addBadgeForTitle(_ title: String) {
 		var dot: CALayer! = badgeDotForTitle(title)
 		if dot == nil {
 			dot = CALayer()
-			dot.backgroundColor = UIColor.redColor().CGColor
-			dot.frame = CGRectMake(0, 0, BadgeRadiu, BadgeRadiu)
+			dot.backgroundColor = UIColor.red.cgColor
+			dot.frame = CGRect(x: 0, y: 0, width: BadgeRadiu, height: BadgeRadiu)
 			dot.cornerRadius = BadgeRadiu / 2
 			dot.masksToBounds = true
 		}
-		dot?.hidden = false
+		dot?.isHidden = false
 		badgeMap[title] = dot
 		setNeedsDisplay()
 	}
 
-	private func removeBadgeForTitle(title: String) {
+	fileprivate func removeBadgeForTitle(_ title: String) {
 		let dot = badgeDotForTitle(title)
 		dot?.removeFromSuperlayer()
-		badgeMap.removeValueForKey(title)
+		badgeMap.removeValue(forKey: title)
 	}
 
-	private func badgeDotForTitle(title: String) -> CALayer? {
+	fileprivate func badgeDotForTitle(_ title: String) -> CALayer? {
 		return badgeMap[title]
 	}
 }
@@ -1123,28 +1136,28 @@ final private class HMScrollView: UIScrollView {
 	}
 
 	// MARK:- Touch
-	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-		if dragging {
-			super.touchesBegan(touches, withEvent: event)
+	override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+		if isDragging {
+			super.touchesBegan(touches, with: event)
 			return
 		}
-		nextResponder()?.touchesBegan(touches, withEvent: event)
+		next?.touchesBegan(touches, with: event)
 	}
 
-	override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-		if dragging {
-			super.touchesMoved(touches, withEvent: event)
+	override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+		if isDragging {
+			super.touchesMoved(touches, with: event)
 			return
 		}
-		nextResponder()?.touchesMoved(touches, withEvent: event)
+		next?.touchesMoved(touches, with: event)
 	}
 
-	override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-		if dragging {
-			super.touchesEnded(touches, withEvent: event)
+	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+		if isDragging {
+			super.touchesEnded(touches, with: event)
 			return
 		}
-		nextResponder()?.touchesEnded(touches, withEvent: event)
+		next?.touchesEnded(touches, with: event)
 	}
 }
 
@@ -1160,24 +1173,24 @@ private final class OpaqueTextLayer: CATextLayer {
 		initialize()
 	}
 
-	override init(layer: AnyObject) {
+	override init(layer: Any) {
 		super.init(layer: layer)
 		initialize()
 	}
 
-	private func initialize() { contentsScale = UIScreen.mainScreen().scale }
-	private var aBackgroundColor: UIColor! = UIColor.whiteColor()
+	fileprivate func initialize() { contentsScale = UIScreen.main.scale }
+	fileprivate var aBackgroundColor: UIColor! = UIColor.white
 
-	func setBackgroundC(color: UIColor!) {
+	func setBackgroundC(_ color: UIColor!) {
 		if let c = color { aBackgroundColor = c }
 		setNeedsDisplay()
 	}
 
-	override func drawInContext(ctx: CGContext) {
+	override func draw(in ctx: CGContext) {
 		UIGraphicsPushContext(ctx)
-		CGContextSetFillColorWithColor(ctx, aBackgroundColor.CGColor)
-		CGContextFillRect(ctx, bounds)
-		super.drawInContext(ctx)
+		ctx.setFillColor(aBackgroundColor.cgColor)
+		ctx.fill(bounds)
+		super.draw(in: ctx)
 		UIGraphicsPopContext()
 	}
 }

@@ -7,6 +7,9 @@
 //
 
 import UIKit
+var iOSTen: Bool {
+    return NSProcessInfo().isOperatingSystemAtLeastVersion(NSOperatingSystemVersion(majorVersion: 10, minorVersion: 0, patchVersion: 0))
+}
 //MARK:- protocol
 public protocol HMSegmentTitleConvertible {
 	var title: (string: String?, attributedString: NSAttributedString?) { get }
@@ -719,7 +722,7 @@ extension HMSegmentedControl_CodeEagle {
 			// Fix rect position/size to avoid blurry labels
 			rect = CGRectMake(ceil(rect.origin.x), ceil(rect.origin.y), ceil(rect.size.width), ceil(rect.size.height))
 			let text = attributedTitleAtIndex(idx)
-			var titleLayer: CATextLayer = CATextLayer()
+			var titleLayer = CATextLayer()
 
 			if backgroundColor != nil && backgroundColor != UIColor.clearColor() {
 				let layer = OpaqueTextLayer()
@@ -729,9 +732,8 @@ extension HMSegmentedControl_CodeEagle {
 			}
 			titleLayer.frame = rect
 			titleLayer.alignmentMode = kCAAlignmentCenter
-			titleLayer.truncationMode = kCATruncationEnd
-			titleLayer.string = text
-
+            titleLayer.truncationMode = iOSTen ? kCATruncationNone : kCATruncationEnd
+            titleLayer.string = text
 			titleLayer.contentsScale = UIScreen.mainScreen().scale
 			scrollView.layer.addSublayer(titleLayer)
 
@@ -1163,16 +1165,11 @@ private final class OpaqueTextLayer: CATextLayer {
 		initialize()
 	}
 
-	private func initialize() {
-		contentsScale = UIScreen.mainScreen().scale
-	}
-
+	private func initialize() { contentsScale = UIScreen.mainScreen().scale }
 	private var aBackgroundColor: UIColor! = UIColor.whiteColor()
 
 	func setBackgroundC(color: UIColor!) {
-		if let c = color {
-			aBackgroundColor = c
-		}
+		if let c = color { aBackgroundColor = c }
 		setNeedsDisplay()
 	}
 
