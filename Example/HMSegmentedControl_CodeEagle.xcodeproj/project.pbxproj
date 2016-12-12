@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		166A5CF91DB48348000B6CBF /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 166A5CF81DB48348000B6CBF /* Default-568h@2x.png */; };
+		16DB160E1DFE7E20007BE401 /* HMSegmentedControl_CodeEagle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DB160D1DFE7E20007BE401 /* HMSegmentedControl_CodeEagle.swift */; };
 		16E02F871D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.h in Headers */ = {isa = PBXBuildFile; fileRef = 16E02F861D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		16E02F8B1D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16E02F841D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.framework */; };
 		16E02F8C1D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 16E02F841D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		16E02F921D5DB6CD005BAAC6 /* HMSegmentedControl_CodeEagle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E02F911D5DB6CD005BAAC6 /* HMSegmentedControl_CodeEagle.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
@@ -53,10 +53,10 @@
 /* Begin PBXFileReference section */
 		166A5CF81DB48348000B6CBF /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		1687AE161C990F3C00EE99D9 /* HMSegmentedControl_CodeEagle_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "HMSegmentedControl_CodeEagle_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		16DB160D1DFE7E20007BE401 /* HMSegmentedControl_CodeEagle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMSegmentedControl_CodeEagle.swift; sourceTree = "<group>"; };
 		16E02F841D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = HMSegmentedControl_CodeEagle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		16E02F861D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HMSegmentedControl_CodeEagle.h; sourceTree = "<group>"; };
 		16E02F881D5DB666005BAAC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		16E02F911D5DB6CD005BAAC6 /* HMSegmentedControl_CodeEagle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HMSegmentedControl_CodeEagle.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* HMSegmentedControl_CodeEagle_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HMSegmentedControl_CodeEagle_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -97,11 +97,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		16DB160C1DFE7E20007BE401 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				16DB160D1DFE7E20007BE401 /* HMSegmentedControl_CodeEagle.swift */,
+			);
+			name = Sources;
+			path = ../Sources;
+			sourceTree = "<group>";
+		};
 		16E02F851D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle */ = {
 			isa = PBXGroup;
 			children = (
 				16E02F861D5DB666005BAAC6 /* HMSegmentedControl_CodeEagle.h */,
-				16E02F911D5DB6CD005BAAC6 /* HMSegmentedControl_CodeEagle.swift */,
 				16E02F881D5DB666005BAAC6 /* Info.plist */,
 			);
 			path = HMSegmentedControl_CodeEagle;
@@ -111,6 +119,7 @@
 			isa = PBXGroup;
 			children = (
 				166A5CF81DB48348000B6CBF /* Default-568h@2x.png */,
+				16DB160C1DFE7E20007BE401 /* Sources */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for HMSegmentedControl_CodeEagle */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -326,7 +335,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16E02F921D5DB6CD005BAAC6 /* HMSegmentedControl_CodeEagle.swift in Sources */,
+				16DB160E1DFE7E20007BE401 /* HMSegmentedControl_CodeEagle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
