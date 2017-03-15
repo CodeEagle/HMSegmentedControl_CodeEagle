@@ -1022,7 +1022,7 @@ extension HMSegmentedControl_CodeEagle {
 		if superview != nil {
 			sendActions(for: UIControlEvents.valueChanged)
 		}
-		indexChangeBlock?(index)
+        DispatchQueue.main.async { self.indexChangeBlock?(index) }
 	}
 }
 //MARK:- Scrolling
