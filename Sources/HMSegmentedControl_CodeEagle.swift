@@ -502,7 +502,6 @@ private extension HMSegmentedControl_CodeEagle {
 		if selectionIndicatorLocation == .down {
 			indicatorYOffset = bounds.size.height - selectionIndicatorHeight + selectionIndicatorEdgeInsets.bottom
 		}
-
 		if selectionIndicatorLocation == .up {
 			indicatorYOffset = selectionIndicatorEdgeInsets.top
 		}
@@ -733,7 +732,7 @@ extension HMSegmentedControl_CodeEagle {
 			}
 
 			// Fix rect position/size to avoid blurry labels
-			rect = CGRect(x: ceil(rect.origin.x), y: ceil(rect.origin.y) + 0.5, width: ceil(rect.size.width), height: ceil(rect.size.height) - 0.5)
+			rect = CGRect(x: ceil(rect.origin.x), y: ceil(rect.origin.y), width: ceil(rect.size.width), height: ceil(rect.size.height))
 			let text = attributedTitleAtIndex(idx)
 			var titleLayer = CATextLayer()
 

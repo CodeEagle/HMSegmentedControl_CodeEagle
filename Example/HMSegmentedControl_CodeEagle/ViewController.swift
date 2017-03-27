@@ -34,7 +34,7 @@ class ViewController: UIViewController {
 		segmentControl.toggleMatchTitle(buttons.first, hide: false)
 //		segmentControl.backgroundColor = UIColor.orangeColor()
 		segmentControl?.frame = CGRect(x: 0, y: 64, width: mainScreenWidth, height: 44)
-		segmentControl?.selectionIndicatorLocation = .down
+		segmentControl?.selectionIndicatorLocation = .none
 		segmentControl?.selectionIndicatorColor = UIColor.red
 		segmentControl?.segmentWidthStyle = .dynamic
 		segmentControl?.selectedSegmentIndex = 0
