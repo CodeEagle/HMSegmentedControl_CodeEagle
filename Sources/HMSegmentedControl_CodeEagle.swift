@@ -733,7 +733,7 @@ extension HMSegmentedControl_CodeEagle {
 			}
 
 			// Fix rect position/size to avoid blurry labels
-			rect = CGRect(x: ceil(rect.origin.x), y: ceil(rect.origin.y), width: ceil(rect.size.width), height: ceil(rect.size.height))
+			rect = CGRect(x: ceil(rect.origin.x), y: ceil(rect.origin.y) + 0.5, width: ceil(rect.size.width), height: ceil(rect.size.height) - 0.5)
 			let text = attributedTitleAtIndex(idx)
 			var titleLayer = CATextLayer()
 
